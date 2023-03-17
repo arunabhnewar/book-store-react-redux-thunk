@@ -1,4 +1,4 @@
-import { BOOK_ADDED, BOOK_DELETED, BOOK_EDITED, BOOK_SEARCH, LOADED } from "./booksActionType";
+import { BOOK_ADDED, BOOK_DELETED, BOOK_UPDATED, LOADED } from "./booksActionType";
 
 // Loaded Action Create
 export const loadAction = (books) => {
@@ -18,15 +18,6 @@ export const addBookAction = (bookInfo) => {
 };
 
 
-// Book Edit Action Create
-export const editAction = (bookId, updateInfo) => {
-    return {
-        type: BOOK_EDITED,
-        payload: { id: bookId, updateInfo },
-    }
-};
-
-
 // Delete Action Create
 export const deleteAction = (id) => {
     return {
@@ -36,13 +27,16 @@ export const deleteAction = (id) => {
 };
 
 
-// Search Action Create
-export const searchAction = (books) => {
+// Update Action Create
+export const updateAction = (id, updateInfo) => {
     return {
-        type: BOOK_SEARCH,
-        payload: books,
+        type: BOOK_UPDATED,
+        payload: { id, updateInfo },
     }
 };
+
+
+
 
 
 

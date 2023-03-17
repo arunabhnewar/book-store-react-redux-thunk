@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import logoImage from "../../assets/logo.svg";
+import { searchAction } from "../../redux/search/searchActions";
 
 const Navbar = () => {
+  // UseSelector
+  const search = useSelector(state => state.search);
+  const { searchName } = search;
+
+  // Dispatch
+  const dispatch = useDispatch();
+
+  // Use State
+  const [searchText, setSearchText] = useState(searchName);
+
+  // Search handler
+  const searchHandler = e => {
+    e.preventDefault();
+    dispatch(searchAction(searchText));
+  };
+
   return (
     <nav className='py-4 2xl:px-6'>
       <div className='container flex items-center justify-between'>
@@ -13,7 +31,7 @@ const Navbar = () => {
           <li className='cursor-pointer'>My Collection</li>
         </ul>
 
-        <form className='flex items-center'>
+        <form className='flex items-center' onChange={searchHandler}>
           <div className='group relative rounded-md bg-white'>
             <svg
               width='20'
@@ -30,6 +48,9 @@ const Navbar = () => {
               placeholder='Filter books...'
               className='search'
               id='lws-searchBook'
+              name='searchText'
+              value={searchText}
+              onChange={e => setSearchText(e.target.value)}
             />
           </div>
         </form>

@@ -7,6 +7,7 @@ import React from "react";
 import Rating from "react-rating";
 import { useDispatch } from "react-redux";
 import deleteBook from "../../redux/books/thunk/deleteBook";
+import { editAction } from "../../redux/edit/editActions";
 
 const BookDetails = ({ book }) => {
   // Dispatch
@@ -18,6 +19,12 @@ const BookDetails = ({ book }) => {
   //Book delete handler
   const bookDeleteHandler = id => {
     dispatch(deleteBook(id));
+  };
+
+  // Book Edit Handler
+  const editInfoHandler = () => {
+    // console.log(book);
+    dispatch(editAction(book));
   };
 
   return (
@@ -35,7 +42,7 @@ const BookDetails = ({ book }) => {
             )}
           </div>
           <div className='text-gray-500 space-x-2'>
-            <button className='lws-edit'>
+            <button className='lws-edit' onClick={editInfoHandler}>
               <svg
                 fill='none'
                 viewBox='0 0 24 24'
