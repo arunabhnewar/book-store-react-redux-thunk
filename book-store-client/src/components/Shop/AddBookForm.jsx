@@ -1,8 +1,12 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import addBook from "../../redux/books/thunk/addBook";
+import updateFeatured from "../../redux/books/thunk/upadateFeatured";
 
 const AddBookForm = () => {
+  // Use selector
+  const editing = useSelector(state => state.editing);
+
   // Dispatch
   const dispatch = useDispatch();
 
@@ -15,6 +19,26 @@ const AddBookForm = () => {
     rating: "",
     featured: false,
   });
+
+  // Editable state
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  // Use Effect
+  useEffect(() => {
+    if (editing?.id) {
+      setIsEditMode(true);
+      setBookInfo({
+        name: editing?.name,
+        author: editing?.author,
+        thumbnail: editing?.thumbnail,
+        price: editing?.price,
+        rating: editing?.rating,
+        featured: editing?.featured,
+      });
+    } else {
+      setIsEditMode(false);
+    }
+  }, [editing]);
 
   // Input data handle function
   const inputsDataHandle = e => {
@@ -34,6 +58,12 @@ const AddBookForm = () => {
     e.preventDefault();
     dispatch(addBook(bookInfo));
     resetData();
+  };
+
+  // Update Book info after editing
+  const updatedBookInfo = e => {
+    e.preventDefault();
+    dispatch(updateFeatured(editing?.id, bookInfo));
   };
 
   // Reset inputs data
@@ -56,7 +86,10 @@ const AddBookForm = () => {
     <div>
       <div className='p-4 overflow-hidden bg-white shadow-cardShadow rounded-md'>
         <h4 className='mb-8 text-xl font-bold text-center'>Add New Book</h4>
-        <form className='book-form' onSubmit={submitHandler}>
+
+        <form
+          className='book-form'
+          onSubmit={isEditMode ? updatedBookInfo : submitHandler}>
           <div className='space-y-2'>
             <label htmlFor='name'>Book Name</label>
             <input
@@ -142,7 +175,7 @@ const AddBookForm = () => {
           </div>
 
           <button type='submit' className='submit' id='submit'>
-            Add Book
+            {isEditMode ? "Update" : "Add Book"}
           </button>
         </form>
       </div>
